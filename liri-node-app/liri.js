@@ -68,10 +68,8 @@ accountTweets.get('statuses/user_timeline', params, function(error, tweets, resp
       console.log("Tweets " + (i+1) + ": " + "\n" + tweets[i].text + 
           "\n" + "Created on: " + tweets[i].created_at);
         console.log("--------------------"); 
-      
+      }
     }
-    
-  }
   });
 }; 
 
@@ -156,7 +154,7 @@ function random() {
         else if (arr[0] == "my-tweets") {
           myTweets();
         }
-    }
+      }
   });  
 };
 
