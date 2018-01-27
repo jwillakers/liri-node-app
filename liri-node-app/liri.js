@@ -19,12 +19,12 @@ var inquirer = require('inquirer');
 
 
 //Creates an object to authenacaite Twitter queries
-var accountTweets = new Twitter(keys.twitterKeys);
+var accountTweets = new Twitter(keys.twitter);
 //Limmit to 20 Tweets
-var limitTweets = 20;
+// var limitTweets = 20;
 
 //Creates an object to auth Spotify queries
-var spotifyInfo = new Spotify(keys.spotifyKeys);
+var spotifyInfo = new Spotify(keys.spotify);
 
 //Global Variables
 var defaultSong = "The Sign";
@@ -56,17 +56,21 @@ switch (action) {
 // ----------------Twitter API--------------------------- 
 function myTweets() {
  
-var params = {screen_name: 'Ms Molly Ogolly', count: limitTweets};
+var params = {screen_name: 'Ms Molly Ogolly', count: 20};
 accountTweets.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (error) {
     console.log(error);
   } else if (!error) {
+    // console.log(tweets);
     console.log("\nThese are your last " + (tweets.length) + " tweets: \n");
-      for (var i = 0; i < tweets.length; i++) {
-        console.log("Tweets " + (i+1) + ": " + "\n" + tweets[i].text + 
+    for(var i = 0; i < tweets.length; i ++) {
+      console.log(tweets[i].text);
+      console.log("Tweets " + (i+1) + ": " + "\n" + tweets[i].text + 
           "\n" + "Created on: " + tweets[i].created_at);
-        console.log("--------------------");
-      }
+        console.log("--------------------"); 
+      
+    }
+    
   }
   });
 }; 
@@ -74,12 +78,15 @@ accountTweets.get('statuses/user_timeline', params, function(error, tweets, resp
 // -------------------Spotify API-------------------------------------
 
 function mySpotify() {
-
+if(value === undefined) {
+  value = defaultSong;
+}
+console.log(value)
   spotifyInfo.search({ type: 'track', query: value, limit: '1'}, function(err, data) {
     if (err) {
       console.log('Error occured: ' + err);
     } else {
-      
+      console.log(data)
       console.log("\nArtist: " + JSON.stringify(data.tracks.items[0].artists[0].name, null, 2) + "\n");
       console.log("Song Title: " + JSON.stringify(data.tracks.items[0].name) + "\n");
       console.log("Album " + JSON.stringify(data.tracks.items[0].album.name) + "\n");
@@ -93,34 +100,34 @@ function mySpotify() {
 function myMovie() {
 
 // Take in the command line arguments
-var movie = process.argv;
+// var movie = process.argv;
 
 // Create an empty string for holding the movie name
-var movieName = "";
+// var value = "";
 
 // Capture all the words in the movie name (ignore first 3 node arguments
-for (var i = 3; i < movie.length; i++) {
+// for (var i = 3; i < movie.length; i++) {
 
 // If TRUE, Build a string with the movie name.
-if (i > 3 && i < movie.length) {
-  movieName = movieName + "+" + movie[i];
-} else {
-  movieName += movie[i];
- }
-}
-
+// if (i > 3 && i < movie.length) {
+//   value = value + "+" + movie[i];
+// } else {
+//   value += movie[i];
+//  }
+// }
+console.log(value)
 // Create URL query variable to store URL to request JSON from OMDB API
-var queryUrl = "http://www.omdbapi.com/?apikey=40e9cece&t=" + movieName + "&tomatoes=true&y=&plot=short&r=json";
+var queryUrl = "http://www.omdbapi.com/?apikey=40e9cece&t=" + value + "&tomatoes=true&y=&plot=short&r=json";
 
 // Run request to OMDB API with URL varible
 request(queryUrl, function(error, response, body) {
 // If the request was unsuccessful ... 
-  if (movieName === undefined) {
-    movieName = 'Mr Nobody';
+  if (value === undefined) {
+    value = defaultMovie;
   }
 
 // If the request was successful ... 
-  else{
+  // else{
 
     var body = JSON.parse(body);
 
@@ -134,9 +141,10 @@ request(queryUrl, function(error, response, body) {
       console.log("Actors: " + body.Actors + "\n ");
       console.log("Rotten Tomatoes Rating: " + body.ratings + "\n "); //tomato rating not render
       console.log("Rotten Tomatoes URL: " + body.tomatoURL);
-  } 
+  // } 
   });
 }
+
 
 // --------------DO-WHAT-IT-SAYS----------------------------
 // reads the data 
