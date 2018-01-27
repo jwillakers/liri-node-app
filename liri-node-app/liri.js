@@ -98,36 +98,20 @@ console.log(value)
 // ----------------MOVIE DBM API---------------------------------------
 
 function myMovie() {
-
 // Take in the command line arguments
-// var movie = process.argv;
 
-// Create an empty string for holding the movie name
-// var value = "";
+// If the request was unsuccessful ... 
+if (value === undefined) {
+    value = defaultMovie;
+  }
 
-// Capture all the words in the movie name (ignore first 3 node arguments
-// for (var i = 3; i < movie.length; i++) {
-
-// If TRUE, Build a string with the movie name.
-// if (i > 3 && i < movie.length) {
-//   value = value + "+" + movie[i];
-// } else {
-//   value += movie[i];
-//  }
-// }
-console.log(value)
-// Create URL query variable to store URL to request JSON from OMDB API
+// call from the OMDB API
 var queryUrl = "http://www.omdbapi.com/?apikey=40e9cece&t=" + value + "&tomatoes=true&y=&plot=short&r=json";
 
 // Run request to OMDB API with URL varible
 request(queryUrl, function(error, response, body) {
-// If the request was unsuccessful ... 
-  if (value === undefined) {
-    value = defaultMovie;
-  }
 
 // If the request was successful ... 
-  // else{
 
     var body = JSON.parse(body);
 
@@ -139,9 +123,9 @@ request(queryUrl, function(error, response, body) {
       console.log("Language: " + body.Language + "\n ");
       console.log("Plot: " + body.Plot + "\n ");
       console.log("Actors: " + body.Actors + "\n ");
-      console.log("Rotten Tomatoes Rating: " + body.ratings + "\n "); //tomato rating not render
+      console.log("Rotten Tomatoes Rating: " + body.Ratings[1].Value + "\n "); //tomato rating not render
       console.log("Rotten Tomatoes URL: " + body.tomatoURL);
-  // } 
+
   });
 }
 
